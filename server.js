@@ -14,6 +14,7 @@ dotenv.config({ path: './config/config.env' });
 connectDB();
 
 // Route files
+const auth_admin = require('./routes/admin/auth');
 
 const app = express();
 
@@ -32,6 +33,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Mount routers
+app.use('/api/v1/admin/auth', auth_admin);
 
 app.use(errorHandler);
 
