@@ -15,6 +15,7 @@ connectDB();
 
 // Route files
 const auth_admin = require('./routes/admin/auth');
+const animalcode = require('./routes/animalcode');
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Mount routers
 app.use('/api/v1/admin/auth', auth_admin);
+app.use('/api/v1/animalcode', animalcode);
 
 app.use(errorHandler);
 

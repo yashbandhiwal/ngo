@@ -17,7 +17,7 @@ const AnimalCodeSchema = new mongoose.Schema({
     },
     photo:{
         type:String,
-        required:[true,'Please add photo']
+        required:false
     },
     behaviour:{
         type:String,
