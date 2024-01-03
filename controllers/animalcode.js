@@ -5,6 +5,7 @@ const randomstring = require("randomstring");
 const path = require('path')
 const formidable = require('formidable');
 const fs = require('fs');
+const ObjectId = require('mongodb').ObjectId;
 
 exports.createAnimal = asyncHandler(async(req,res,next) => {
     /**
@@ -69,7 +70,6 @@ exports.updateAnimal = asyncHandler(async(req,res,next) => {
      * @route PUT api/v1/animalcode/createAnimal
      * @access private
      */
-
     let {
         petName,
         breed,
@@ -80,11 +80,11 @@ exports.updateAnimal = asyncHandler(async(req,res,next) => {
         id
     } = req.body
 
-    if(id)
+    if(!id)
     return next(new ErrorResponse(`Id is not defined`, 404));
 
     let animalExist = await AnimalCode.findById(id)
-    if(animalExist)
+    if(!animalExist)
     return next(new ErrorResponse(`No animal found with the id ${id}`, 404));
 
     obj = {}
@@ -109,15 +109,89 @@ exports.updateAnimal = asyncHandler(async(req,res,next) => {
 
     obj.updatedAt = Date.now()
 
-    let updateAnimal = await AnimalCode.findByIdAndUpdate({
-        id:id
+    let data = await AnimalCode.findByIdAndUpdate({
+        _id:new ObjectId(id)
     },{
         $set:obj
+    },{
+        upsert:true, 
+        // returnNewDocument : true,
+        returnDocument: "after"
     })
 
     res.status(200).json({
         success:true,
-        data:updateAnimal
+        data:data
     })
 
+})
+
+exports.getAnimal = asyncHandler(async(req,res,next) => {
+
+    /**
+     * @desc get
+     * @route GET api/v1/animalcode/getAnimal/:id
+     * @access private
+     */
+
+    let {
+        id
+    } = req.params
+
+    let data = await AnimalCode.findById(id)
+
+    res.status(200).json({
+        success:true,
+        data:data
+    })
+
+})
+
+exports.uploadPic = asyncHandler(async(req,res,next) => {
+    /**
+     * @desc upload pic
+     * @route put api/v1/animalcode/uploadpic/:id
+     * @access private
+     */
+
+    let filenameOfProfile  = "";
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields, files) => {
+
+        let {
+            id
+        } = req.params
+
+        let oldPath = files.photo[0].filepath;
+        
+        let newPath = path.join(__dirname,'../', 'public')
+            + '/' + files.photo[0].newFilename + "" + files.photo[0].originalFilename
+        
+        let rawData = fs.readFileSync(oldPath)
+
+        filenameOfProfile = files.photo[0].newFilename + "" + files.photo[0].originalFilename
+
+        fs.writeFile(newPath, rawData, function (err) {
+            if (err) return next(new ErrorResponse(`error: ${err}`, 400));
+        })
+
+
+        let code = await AnimalCode.findByIdAndUpdate({
+            _id:new ObjectId(id)
+        },
+        {
+            $set:{
+                photo:filenameOfProfile
+            }
+        },
+        {
+            // returnNewDocument : true,
+            returnDocument: "after"
+        })
+
+        res.status(200).json({
+            success:true,
+            data:code
+        })
+    })
 })

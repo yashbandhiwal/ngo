@@ -13,14 +13,16 @@ dotenv.config({ path: './config/config.env' });
 // Connect to database
 connectDB();
 
-// Route files
-const auth_admin = require('./routes/admin/auth');
-const animalcode = require('./routes/animalcode');
-
 const app = express();
 
 // Body parser
 app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
+
+// Route files
+const auth_admin = require('./routes/admin/auth');
+const animalcode = require('./routes/animalcode');
+
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {

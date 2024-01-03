@@ -47,4 +47,4 @@ const AnimalCodeSchema = new mongoose.Schema({
 
 })
 
-module.exports = mongoose.model('Admincode', AnimalCodeSchema);
+module.exports = mongoose.model('Animalcode', AnimalCodeSchema);
