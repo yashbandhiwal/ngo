@@ -162,6 +162,17 @@ exports.uploadPic = asyncHandler(async(req,res,next) => {
             id
         } = req.params
 
+        let animalExist = await AnimalCode.findById(id)
+        if(!animalExist)
+        return next(new ErrorResponse(`Animal data is not there`, 404));
+
+        let filedes = path.join(__dirname,'../', 'public') + '/' + animalExist.photo
+
+        if(animalExist.photo){
+            if(fs.existsSync(filedes))
+            fs.unlinkSync(path.join(__dirname,'../', 'public') + '/' + animalExist.photo)
+        }
+
         let oldPath = files.photo[0].filepath;
         
         let newPath = path.join(__dirname,'../', 'public')
