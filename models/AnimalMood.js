@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 
 const AnimalMoodSchema = new mongoose.Schema({
 
+    AnimalId:{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Animalcode',
+        required: true
+    },
     mood:{
         type: String,
         enum: ['rad', 'good', 'meh', 'happy','bad','awful'],

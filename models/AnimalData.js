@@ -2,6 +2,12 @@ const mongoose = require('mongoose');
 
 const AnimalDataSchema = new mongoose.Schema({
 
+    AnimalId:{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Animalcode',
+        required: true
+    },
+
     petCode:{
         type: String,
         required:false,
@@ -24,14 +30,6 @@ const AnimalDataSchema = new mongoose.Schema({
         required:[true,'Please add health']
     },
     photo:[],
-    dose:[{
-        illness:{
-            type:String // IllnessCode
-        },
-        medicine:{
-            type:String // medicineCode
-        }
-    }],
     edited:{
         type:Boolean,
         default:false

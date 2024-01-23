@@ -14,12 +14,11 @@ const CheckUpSchema = new mongoose.Schema({
     illness:{
         type:String,
     },
-    medicineId:[{
+    AnimalId:{
         type: mongoose.Schema.ObjectId,
-        ref: 'Medicine',
+        ref: 'Animalcode',
         required: true
-    }],
-
+    }
 
 })
 

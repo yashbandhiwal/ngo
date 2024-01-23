@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const IllnessSchema = new mongoose.Schema({
+const DoseSchema = new mongoose.Schema({
 
     petCode:{
         type:String,
@@ -20,8 +20,13 @@ const IllnessSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'Animalcode',
         required: true
+    },
+    Checkup:{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Checkup',
+        required: true
     }
 
 })
 
-module.exports = mongoose.model('Illness', IllnessSchema);
+module.exports = mongoose.model('Dose', DoseSchema);
