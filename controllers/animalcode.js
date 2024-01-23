@@ -7,12 +7,12 @@ const formidable = require('formidable');
 const fs = require('fs');
 const ObjectId = require('mongodb').ObjectId;
 
+/**
+ * @desc savig data of animal
+ * @route POST api/v1/animalcode/createAnimal
+ * @access private
+ */
 exports.createAnimal = asyncHandler(async(req,res,next) => {
-    /**
-     * @desc savig data of animal
-     * @route POST api/v1/animalcode/createAnimal
-     * @access private
-     */
 
     let filenameOfProfile  = "";
     const form = new formidable.IncomingForm();
@@ -63,13 +63,13 @@ exports.createAnimal = asyncHandler(async(req,res,next) => {
 })
 
 
+/**
+ * @desc update data of animal
+ * @route PUT api/v1/animalcode/createAnimal
+ * @access private
+ */
 exports.updateAnimal = asyncHandler(async(req,res,next) => {
 
-    /**
-     * @desc update data of animal
-     * @route PUT api/v1/animalcode/createAnimal
-     * @access private
-     */
     let {
         petName,
         breed,
@@ -126,13 +126,13 @@ exports.updateAnimal = asyncHandler(async(req,res,next) => {
 
 })
 
+/**
+ * @desc get
+ * @route GET api/v1/animalcode/getAnimal/:id
+ * @access private
+ */
 exports.getAnimal = asyncHandler(async(req,res,next) => {
 
-    /**
-     * @desc get
-     * @route GET api/v1/animalcode/getAnimal/:id
-     * @access private
-     */
 
     let {
         id
@@ -147,12 +147,12 @@ exports.getAnimal = asyncHandler(async(req,res,next) => {
 
 })
 
+/**
+ * @desc upload pic
+ * @route put api/v1/animalcode/uploadpic/:id
+ * @access private
+ */
 exports.uploadPic = asyncHandler(async(req,res,next) => {
-    /**
-     * @desc upload pic
-     * @route put api/v1/animalcode/uploadpic/:id
-     * @access private
-     */
 
     let filenameOfProfile  = "";
     const form = new formidable.IncomingForm();
@@ -208,14 +208,17 @@ exports.uploadPic = asyncHandler(async(req,res,next) => {
 })
 
 
+/**
+ * @desc get list
+ * @route GET api/v1/animalcode/list
+ * @access private
+ */
 exports.list = asyncHandler(async(req,res,next) => {
 
-    /**
-     * @desc get list
-     * @route GET api/v1/animalcode/list
-     * @access private
-     */
-
+    let {
+        keyword,
+        sort
+    } = req.params
 
     // Pagination
     const page = parseInt(req.query.page, 10) || 1;
@@ -226,7 +229,9 @@ exports.list = asyncHandler(async(req,res,next) => {
 
     let query = await AnimalCode.aggregate([
         {
-            $match:{}
+            $match:{
+                // regex on pet name , behaviour, breed, health
+            }
         },
         {
             $skip:startIndex
